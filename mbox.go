@@ -15,6 +15,7 @@
 package mbox
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -26,6 +27,18 @@ type Format string
 const (
 	Mboxrd Format = "mboxrd"
 )
+
+func (f *Format) Parse(s string) error {
+	switch s {
+	case "mboxrd":
+		*f = Mboxrd
+
+	default:
+		return errors.New("unknown format")
+	}
+
+	return nil
+}
 
 type Mbox struct {
 	Format Format

@@ -66,12 +66,19 @@ func main() {
 func cmdExtract(args []string) {
 	cmdline := cmdline.New()
 	cmdline.AddArgument("path", "the mbox file")
+	cmdline.AddOption("f", "format", "format", "the mbox format")
+	cmdline.SetOptionDefault("f", "mboxrd")
 	cmdline.AddOption("o", "output", "directory",
 		"the directory to extract messages to")
 	cmdline.SetOptionDefault("o", ".")
 	cmdline.Parse(args)
 
-	format := mbox.Mboxrd // TODO option
+	formatStr := cmdline.OptionValue("format")
+	var format mbox.Format
+	if err := format.Parse(formatStr); err != nil {
+		die("invalid mbox format: %v", err)
+	}
+
 	path := cmdline.ArgumentValue("path")
 	dirPath := cmdline.OptionValue("output")
 
@@ -115,6 +122,8 @@ func cmdExtract(args []string) {
 func cmdList(args []string) {
 	cmdline := cmdline.New()
 	cmdline.AddArgument("path", "the mbox file")
+	cmdline.AddOption("f", "format", "format", "the mbox format")
+	cmdline.SetOptionDefault("f", "mboxrd")
 	cmdline.AddOption("t", "template", "template",
 		"the template used for each message line")
 	cmdline.SetOptionDefault("t",
@@ -127,7 +136,12 @@ func cmdList(args []string) {
 		die("cannot parse template string: %v", err)
 	}
 
-	format := mbox.Mboxrd // TODO option
+	formatStr := cmdline.OptionValue("format")
+	var format mbox.Format
+	if err := format.Parse(formatStr); err != nil {
+		die("invalid mbox format: %v", err)
+	}
+
 	path := cmdline.ArgumentValue("path")
 
 	mbox, err := mbox.Open(path, format)
