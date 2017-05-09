@@ -10,15 +10,15 @@ The basic use case is to open a mailbox file and read its messages. The
 following code does not include error handling.
 
 ```go
-mbox, _ := mbox.Open(path, format)
+mbox, _ := mbox.Open(path, mbox.Mboxrd)
 
 for {
-    mboxMsg, _ := mbox.Read()
-    if mboxMsg == nil {
+    msg, _ := mbox.Read()
+    if msg == nil {
         break
     }
 
-    fmt.Printf("%s\n", mboxMsg.Id)
+    fmt.Printf("%s\n", msg.Id)
 }
 
 mbox.Close()
