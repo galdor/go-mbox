@@ -1,0 +1,32 @@
+
+# go-mbox
+
+## Introduction
+`mbox` is a Go library to parse mbox files. It currently supports the mboxrd
+format used for example for Google Mail exports.
+
+## Library
+The basic use case is to open a mailbox file and read its messages. The
+following code does not include error handling.
+
+```go
+mbox, _ := mbox.Open(path, format)
+
+for {
+    mboxMsg, _ := mbox.Read()
+    if mboxMsg == nil {
+        break
+    }
+
+    fmt.Printf("%s\n", mboxMsg.Id)
+}
+
+mbox.Close()
+```
+
+## mbox command
+The `mbox` directory contains a tool to work with mbox files. Commands and
+options can be displayed with `mbox -h`.
+
+## Contact
+If you have an idea or a question, email me at <khaelin@gmail.com>.
